@@ -11,7 +11,7 @@ terraform {
 
 terraform {
   backend "s3" {
-    bucket = "skillstreet-terraform-state-file"
+    bucket = "terraform-state-file"
     key    = "terraform"
     region = "us-east-1"
   }
@@ -204,4 +204,5 @@ variable "auto_scale_in_cpu_threshold" {}
 variable "auto_scale_out_cpu_threshold" {}
 
 # CODE-DEPLOY
+
 variable "termination_wait_time_in_minutes" {}
