@@ -48,6 +48,46 @@ AWS Secret Access Key: <your-secret-key>
 Default region name: <your-region>
 Default output format: json
 
+----------------------
+
+## 🪣 Creating the S3 Bucket for Terraform State
+
+Terraform uses an S3 bucket to store its remote state file, which tracks your deployed infrastructure.
+
+Before running terraform init, create the S3 bucket manually:
+```bash
+aws s3api create-bucket \
+  --bucket terraform-state-file \
+  --region <region> \
+  --create-bucket-configuration LocationConstraint=<region>
+```
+
+Optionally, enable versioning to preserve state history:
+
+```bash
+aws s3api put-bucket-versioning \
+  --bucket my-terraform-state-bucket \
+  --versioning-configuration Status=Enabled
+```
+
+Then, confirm the bucket exists:
+
+```bash
+aws s3 ls
+```
+
+Ensure the same bucket name is configured in your Terraform main.tf file:
+```HCL
+terraform {
+  backend "s3" {
+    bucket         = "terraform-state-file"
+    key            = "terraform"
+    region         = "<region>"
+    encrypt        = true
+  }
+}
+```
+
 ## 🚀 Deploying the Infrastructure
 ```bash
 # Initialize Terraform (downloads required providers and modules)
